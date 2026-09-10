@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="auto">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CFB Scoreboard</title>
+  <meta name="description" content="A responsive, live-updating college football scoreboard: teams, AP rankings, scores, and where each game is played." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <h1 class="brand-title">Scoreboard</h1>
+      <div class="header-controls">
+        <div id="header-actions" class="header-actions">
+          <a class="text-btn" href="index.html" title="Helmet schedule">Helmet Schedule ↗</a>
+          <button id="refresh-btn" class="icon-btn" type="button" title="Refresh" aria-label="Refresh scoreboard">↻</button>
+          <button id="theme-btn" class="icon-btn" type="button" title="Toggle light / dark" aria-label="Toggle light or dark mode">🌗</button>
+        </div>
+        <button id="menu-btn" class="icon-btn menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="header-actions">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="content">
+    <p id="week-label" class="week-label">Loading week…</p>
+    <div id="status" class="status" role="status" aria-live="polite">Loading matchups…</div>
+    <section id="matrix" class="matrix" aria-label="College football scoreboard"></section>
+  </main>
+
+  <footer class="site-footer">
+    <p>Data &amp; logos via ESPN. Ranks reflect the current AP poll (—&nbsp;= unranked). Not affiliated with any conference or ESPN.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
