@@ -229,8 +229,16 @@ function initHeadroom() {
     "scroll",
     () => {
       const y = els.gridWrap.scrollTop;
+      // Toggling the header changes .grid-wrap's height, which shifts scrollTop
+      // near the bottom. Freeze the chrome state in that zone so those layout-
+      // induced shifts can't be misread as user scroll and oscillate the header.
+      const chromeH = els.topChrome.offsetHeight;
+      const nearBottom =
+        y >= els.gridWrap.scrollHeight - els.gridWrap.clientHeight - chromeH - 4;
       if (y <= 4) {
         document.body.classList.remove("chrome-hidden"); // always show at the top
+      } else if (nearBottom) {
+        // hold current state near the bottom
       } else if (y > lastY + THRESHOLD) {
         document.body.classList.add("chrome-hidden"); // scrolling down
         setMenu(false); // close the mobile menu when the header hides

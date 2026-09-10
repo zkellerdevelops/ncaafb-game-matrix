@@ -256,8 +256,8 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
   border-radius: 14px;
   box-shadow: var(--shadow);
   background: var(--surface);
-  flex: 1 1 auto;
-  min-height: 0; /* fills the remaining height and scrolls internally */
+  flex: 0 1 auto; /* hug the table's height; shrink + scroll only when rows overflow */
+  min-height: 0;
   width: fit-content; /* hug the table so there's no empty surface to the right */
   max-width: 100%;
   align-self: flex-start;
