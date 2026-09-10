@@ -106,6 +106,25 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+}
+.brand-logo {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.brand-logo img {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
 }
 .header-controls { display: flex; align-items: center; gap: .5rem; position: relative; }
 .header-actions { display: flex; align-items: center; gap: .5rem; }
