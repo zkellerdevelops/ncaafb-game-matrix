@@ -326,7 +326,9 @@ function cellHtml(game, dark) {
   }${result ? ` — ${result.letter}${result.score ? " " + result.score : ""}` : when ? ` — ${when}` : ""}`;
 
   const badge = result
-    ? `<span class="result ${result.cls}" title="${esc(result.score)}">${result.letter}</span>`
+    ? `<span class="result ${result.cls}" title="${esc(result.score)}">${result.letter}${
+        result.score ? `<span class="result-score">${esc(result.score)}</span>` : ""
+      }</span>`
     : "";
 
   return `

@@ -376,17 +376,15 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
 .game-cell .rank { font-size: .58rem; font-weight: 800; color: #ef4444; }
 .game-cell .kick { font-size: .56rem; font-weight: 600; color: var(--text-dim); opacity: .85; }
 
-/* Win / loss / tie result badge, pinned to the cell's top-left corner. */
+/* Win / loss / tie result badge, sitting above the helmet (in normal flow). */
 .game-cell.has-result img { opacity: .82; }
 .result {
-  position: absolute;
-  top: -10px;
-  left: 4px;
   min-width: 17px;
   height: 17px;
-  padding: 0 3px;
-  display: grid;
-  place-items: center;
+  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
   border-radius: 5px;
   font-size: .64rem;
   font-weight: 800;
@@ -394,12 +392,14 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
   color: #fff;
   box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
 }
+.result-score { font-size: .56rem; font-weight: 700; font-variant-numeric: tabular-nums; }
 .result.w { background: #16a34a; }
 .result.l { background: #dc2626; }
 .result.t { background: #6b7280; }
 
 @media (max-width: 640px) {
   .result { min-width: 22px; height: 22px; font-size: .8rem; border-radius: 6px; }
+  .result-score { font-size: .68rem; }
 }
 
 /* ---------- Desktop: fit the whole matrix to the viewport width ---------- */
@@ -428,6 +428,7 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
     height: clamp(15px, 1.5vw, 18px);
     font-size: clamp(.56rem, .82vw, .66rem);
   }
+  .result-score { font-size: clamp(.5rem, .72vw, .58rem); }
 
   .fav-btn { font-size: clamp(.85rem, 1.1vw, 1.05rem); }
 }
