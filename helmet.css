@@ -1,0 +1,426 @@
+/* ---------- Theme tokens ---------- */
+:root {
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --surface-2: #eef1f5;
+  --border: #e2e5ea;
+  --text: #14181f;
+  --text-dim: #5a6472;
+  --accent: #1d4ed8;
+  --highlight: #fff7d6;
+  --highlight-line: #f0c000;
+  --chip-bg: #f0f2f5;
+  --team-col-bg: #e9edf3;
+  --team-col-head-bg: #dde3ec;
+  --team-col-edge: #c2cad6;
+  --team-col-shadow: rgba(16, 24, 40, .22);
+  --shadow: 0 1px 2px rgba(16, 24, 40, .06), 0 4px 16px rgba(16, 24, 40, .06);
+}
+
+:root[data-theme="dark"] {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface-2: #1c232d;
+  --border: #2a323d;
+  --text: #e6edf3;
+  --text-dim: #8b98a9;
+  --accent: #60a5fa;
+  --highlight: #2a2410;
+  --highlight-line: #d9a900;
+  --chip-bg: #222a35;
+  --team-col-bg: #1e2632;
+  --team-col-head-bg: #232d3a;
+  --team-col-edge: #3a4553;
+  --team-col-shadow: rgba(0, 0, 0, .6);
+  --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 6px 20px rgba(0, 0, 0, .35);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface-2: #1c232d;
+    --border: #2a323d;
+    --text: #e6edf3;
+    --text-dim: #8b98a9;
+    --accent: #60a5fa;
+    --highlight: #2a2410;
+    --highlight-line: #d9a900;
+    --chip-bg: #222a35;
+    --team-col-bg: #1e2632;
+    --team-col-head-bg: #232d3a;
+    --team-col-edge: #3a4553;
+    --team-col-shadow: rgba(0, 0, 0, .6);
+    --shadow: 0 1px 2px rgba(0, 0, 0, .4), 0 6px 20px rgba(0, 0, 0, .35);
+  }
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.4;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background .2s ease, color .2s ease;
+}
+
+/* ---------- Header ---------- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: saturate(1.4) blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+.header-inner {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: .7rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.brand-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.header-controls { display: flex; align-items: center; gap: .5rem; position: relative; }
+.header-actions { display: flex; align-items: center; gap: .5rem; }
+.menu-btn { display: none; } /* desktop: actions are inline, no hamburger */
+
+.icon-btn {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 1.15rem;
+  cursor: pointer;
+  display: grid; place-items: center;
+  transition: background .15s ease, transform .1s ease, border-color .15s ease;
+}
+.icon-btn:hover { background: var(--surface-2); border-color: var(--accent); }
+.icon-btn:active { transform: scale(.94); }
+.icon-btn:focus-visible, .text-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.text-btn {
+  text-decoration: none;
+  color: var(--text-dim);
+  font-size: .85rem;
+  font-weight: 600;
+  padding: .5rem .6rem;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+.text-btn:hover { color: var(--accent); background: var(--surface-2); }
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: .6rem 1rem;
+}
+.site-footer p {
+  margin: 0;
+  max-width: 1400px;
+  margin-inline: auto;
+  font-size: .7rem;
+  line-height: 1.35;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+/* ---------- Conference tabs ---------- */
+.conf-tabs {
+  position: sticky;
+  top: 57px; /* sits just under the sticky header */
+  z-index: 9;
+  display: flex;
+  gap: .35rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: .55rem 1rem;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: saturate(1.4) blur(8px);
+}
+.tab {
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-dim);
+  font-size: .85rem;
+  font-weight: 700;
+  padding: .45rem .9rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.tab:hover { border-color: var(--accent); color: var(--text); }
+.tab.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- Layout ---------- */
+.content {
+  flex: 1;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: .8rem;
+  color: var(--text-dim);
+  margin-bottom: .85rem;
+}
+.legend span { display: inline-flex; align-items: center; gap: .35rem; }
+.chip {
+  display: inline-grid; place-items: center;
+  min-width: 20px; height: 20px; padding: 0 5px;
+  border-radius: 6px;
+  font-size: .68rem; font-weight: 800;
+  background: var(--chip-bg); color: var(--text-dim);
+}
+.chip.at { color: var(--accent); }
+.chip.nt { color: #a855f7; }
+.swatch.bye {
+  width: 18px; height: 18px; border-radius: 5px;
+  background: repeating-linear-gradient(45deg, var(--chip-bg), var(--chip-bg) 4px, transparent 4px, transparent 8px);
+  border: 1px solid var(--border);
+}
+
+.status { padding: 1rem; text-align: center; color: var(--text-dim); font-size: .95rem; }
+.status.error { color: #ef4444; }
+.status.hidden { display: none; }
+
+/* ---------- Grid ---------- */
+.grid-wrap {
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  background: var(--surface);
+  max-height: calc(100vh - 250px);
+}
+.grid {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+.grid th, .grid td {
+  border-bottom: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Column headers (weeks) */
+.grid thead th {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--surface-2);
+  color: var(--text-dim);
+  font-size: .72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  padding: .5rem .35rem;
+  white-space: nowrap;
+}
+.grid thead th .wk-date { display: block; font-size: .62rem; font-weight: 500; opacity: .8; }
+
+/* Team (row header) — top-left corner + sticky first column */
+.corner, .team-cell {
+  position: sticky;
+  left: 0;
+  z-index: 10;
+  background: var(--team-col-bg);
+  text-align: left;
+  min-width: 132px;
+  max-width: 132px;
+  /* Cast a shadow over the scrolling helmets so the column clearly floats on top. */
+  box-shadow: 6px 0 10px -4px var(--team-col-shadow);
+}
+/* Corner sits above both the week headers (sticky top) and the team column
+   (sticky left), so it stays put while scrolling either direction. */
+.grid thead th.corner {
+  z-index: 40;
+  top: 0;
+  left: 0;
+  background: var(--team-col-head-bg);
+  border-bottom: 2px solid var(--team-col-edge);
+}
+.team-cell { border-right: 2px solid var(--team-col-edge); }
+
+.team-cell, .corner { overflow: hidden; }
+
+.team-inner {
+  display: flex; align-items: center; gap: .5rem;
+  padding: .5rem .6rem;
+  border-left: 5px solid var(--team-color, var(--accent));
+  overflow: hidden;
+}
+.team-id {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  flex: 1; min-width: 0;
+}
+.team-id img { width: 30px; height: 30px; object-fit: contain; }
+.team-id .t-abbr {
+  font-weight: 800; font-size: .68rem; letter-spacing: .01em;
+  max-width: 100%;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+/* Favorite star toggle */
+.fav-btn {
+  flex: 0 0 auto;
+  border: none;
+  background: none;
+  cursor: pointer;
+  padding: 2px;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--text-dim);
+  border-radius: 6px;
+  transition: color .15s ease, transform .1s ease;
+}
+.fav-btn:hover { color: var(--highlight-line); transform: scale(1.15); }
+.fav-btn:active { transform: scale(.9); }
+.fav-btn.on { color: var(--highlight-line); }
+.fav-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* Favorite row: subtle accent + gold left edge */
+.grid tbody tr.is-fav .team-cell {
+  background: color-mix(in srgb, var(--highlight-line) 16%, var(--team-col-head-bg));
+}
+.grid tbody tr.is-fav .team-inner { border-left-color: var(--highlight-line); }
+.grid tbody tr.is-fav .cell { background: color-mix(in srgb, var(--highlight-line) 9%, transparent); }
+.grid tbody tr.is-fav .cell.current-col { background: var(--highlight); }
+
+/* Game cells */
+.cell { padding: .3rem; min-width: 58px; }
+.cell.current-col { background: var(--highlight); }
+thead th.current-col { background: var(--highlight); color: var(--text); box-shadow: inset 0 -3px 0 var(--highlight-line); }
+
+.game-cell {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  position: relative;
+}
+.game-cell img { width: 34px; height: 34px; object-fit: contain; }
+.game-cell .ind {
+  font-size: .62rem; font-weight: 800; letter-spacing: .02em;
+  color: var(--text-dim);
+}
+.game-cell .ind.at { color: var(--accent); }
+.game-cell .ind.nt { color: #a855f7; }
+.game-cell .rank { font-size: .58rem; font-weight: 800; color: #ef4444; }
+
+/* Win / loss / tie result badge, pinned to the cell's top-left corner. */
+.game-cell.has-result img { opacity: .82; }
+.result {
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 3px;
+  display: grid;
+  place-items: center;
+  border-radius: 5px;
+  font-size: .64rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #fff;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .3);
+}
+.result.w { background: #16a34a; }
+.result.l { background: #dc2626; }
+.result.t { background: #6b7280; }
+
+@media (max-width: 640px) {
+  .result { min-width: 22px; height: 22px; font-size: .8rem; border-radius: 6px; }
+}
+
+.bye {
+  color: var(--text-dim);
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  opacity: .55;
+  background: repeating-linear-gradient(45deg, transparent, transparent 6px, color-mix(in srgb, var(--border) 60%, transparent) 6px, color-mix(in srgb, var(--border) 60%, transparent) 7px);
+}
+
+.grid tbody tr:hover td:not(.team-cell) { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+.grid tbody tr:hover .team-cell { background: var(--team-col-head-bg); }
+
+@media (max-width: 640px) {
+  .brand-title { font-size: 1.05rem; }
+
+  /* Collapse header links/buttons behind a hamburger (conference tabs stay put). */
+  .menu-btn { display: grid; }
+  .header-actions {
+    position: absolute;
+    top: calc(100% + .5rem);
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: .35rem;
+    padding: .4rem;
+    min-width: 180px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    display: none;
+  }
+  .header-actions.open { display: flex; }
+  .header-actions .text-btn,
+  .header-actions .icon-btn { width: 100%; height: 42px; justify-content: flex-start; }
+  .header-actions .icon-btn { padding: 0 .7rem; }
+
+  /* Bigger, easier-to-tap tiles on phones. */
+  .content { padding: .75rem .5rem; }
+  .grid-wrap { max-height: calc(100vh - 220px); border-radius: 12px; }
+
+  .corner, .team-cell { min-width: 108px; max-width: 108px; }
+  .team-inner { padding: .6rem .4rem; gap: .35rem; }
+  .team-id img { width: 40px; height: 40px; }
+  .team-id .t-abbr { font-size: .78rem; }
+  .fav-btn { font-size: 1.2rem; padding: 2px; }
+
+  .grid thead th { font-size: .82rem; padding: .6rem .4rem; }
+  .grid thead th .wk-date { font-size: .7rem; }
+
+  .cell { min-width: 88px; padding: .5rem .35rem; }
+  .game-cell { gap: 4px; }
+  .game-cell img { width: 56px; height: 56px; }
+  .game-cell .ind { font-size: .8rem; }
+  .game-cell .rank { font-size: .72rem; }
+  .bye { font-size: .72rem; }
+}
+
+/* Extra-large helmets on the smallest phones. */
+@media (max-width: 400px) {
+  .corner, .team-cell { min-width: 96px; max-width: 96px; }
+  .cell { min-width: 96px; }
+  .game-cell img { width: 62px; height: 62px; }
+}
