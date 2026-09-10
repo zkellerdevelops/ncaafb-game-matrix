@@ -164,13 +164,13 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
 /* ---------- Footer ---------- */
 .site-footer {
   border-top: 1px solid var(--border);
-  padding: .6rem 1rem;
+  padding: .3rem 1rem;
 }
 .site-footer p {
   margin: 0;
   max-width: 1400px;
   margin-inline: auto;
-  font-size: .7rem;
+  font-size: .5rem;
   line-height: 1.35;
   color: var(--text-dim);
   text-align: center;
