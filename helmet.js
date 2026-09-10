@@ -270,7 +270,6 @@ document.addEventListener("click", (e) => {
 
 /* ---------- Theme: auto -> light -> dark ---------- */
 const THEME_KEY = "sec-matrix-theme";
-const THEME_ORDER = ["auto", "light", "dark"];
 
 function resolvedTheme() {
   const t = document.documentElement.getAttribute("data-theme") || "auto";
@@ -285,8 +284,16 @@ function initTheme() {
   applyTheme(localStorage.getItem(THEME_KEY) || "auto");
 }
 els.theme.addEventListener("click", () => {
+  // Flip against what's actually on screen (resolving "auto" via the OS) so a
+  // single press always changes the visible theme.
   const current = document.documentElement.getAttribute("data-theme") || "auto";
-  const next = THEME_ORDER[(THEME_ORDER.indexOf(current) + 1) % THEME_ORDER.length];
+  const effective =
+    current === "auto"
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light"
+      : current;
+  const next = effective === "dark" ? "light" : "dark";
   localStorage.setItem(THEME_KEY, next);
   applyTheme(next);
   if (state.built) render(); // re-render so helmet logos use the right light/dark variant
