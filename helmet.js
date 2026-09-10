@@ -302,16 +302,38 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () 
   if ((document.documentElement.getAttribute("data-theme") || "auto") === "auto" && state.built) render();
 });
 
-/* ---------- Favorite team ---------- */
-const FAV_KEY = "sec-fav-team";
+/* ---------- Favorite team (one per conference) ---------- */
+const FAV_KEY = "cfb-fav-teams"; // map of conference key -> favorite team id
+const LEGACY_FAV_KEY = "sec-fav-team"; // single global favorite from earlier versions
 
-function getFavorite() {
-  return localStorage.getItem(FAV_KEY) || null;
+function loadFavorites() {
+  let map = {};
+  try {
+    const raw = localStorage.getItem(FAV_KEY);
+    const parsed = raw ? JSON.parse(raw) : null;
+    if (parsed && typeof parsed === "object") map = parsed;
+  } catch {
+    map = {};
+  }
+  // Migrate the old single favorite into the SEC slot, once.
+  const legacy = localStorage.getItem(LEGACY_FAV_KEY);
+  if (legacy && !("sec" in map)) {
+    map.sec = legacy;
+    localStorage.setItem(FAV_KEY, JSON.stringify(map));
+  }
+  localStorage.removeItem(LEGACY_FAV_KEY);
+  return map;
+}
+const favorites = loadFavorites();
+
+function getFavorite(confKey) {
+  return favorites[confKey] || null;
 }
 function setFavorite(id) {
-  if (id) localStorage.setItem(FAV_KEY, id);
-  else localStorage.removeItem(FAV_KEY);
-  state.favoriteId = getFavorite();
+  if (id) favorites[state.confKey] = id;
+  else delete favorites[state.confKey];
+  localStorage.setItem(FAV_KEY, JSON.stringify(favorites));
+  state.favoriteId = getFavorite(state.confKey);
   if (state.built) render();
 }
 // Favorite first (only if it's in the current conference), rest alphabetical.
@@ -330,8 +352,8 @@ const state = {
   weekDates: {},
   currentWeek: null,
   built: false,
-  favoriteId: getFavorite(),
   confKey: localStorage.getItem(CONF_KEY) || "sec",
+  favoriteId: getFavorite(localStorage.getItem(CONF_KEY) || "sec"),
 };
 
 /* ---------- Conference tabs ---------- */
@@ -347,6 +369,7 @@ function renderTabs() {
 function switchConference(key) {
   if (!CONFERENCES[key] || key === state.confKey) return;
   state.confKey = key;
+  state.favoriteId = getFavorite(key); // each conference keeps its own favorite
   localStorage.setItem(CONF_KEY, key);
   renderTabs();
   load();
