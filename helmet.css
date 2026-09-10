@@ -184,8 +184,12 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
   margin: 0 auto;
   padding: .55rem 1rem;
   background: color-mix(in srgb, var(--bg) 92%, transparent);
+  overflow-x: auto;               /* scroll sideways when the tabs don't fit */
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 .tab {
+  flex: 0 0 auto;                 /* keep pill size; scroll rather than shrink */
   border: 1px solid var(--border);
   background: var(--surface);
   color: var(--text-dim);
@@ -194,6 +198,7 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
   padding: .45rem .9rem;
   border-radius: 999px;
   cursor: pointer;
+  white-space: nowrap;
   transition: background .15s ease, color .15s ease, border-color .15s ease;
 }
 .tab:hover { border-color: var(--accent); color: var(--text); }
