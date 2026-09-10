@@ -326,6 +326,10 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
   max-width: 100%;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
+.team-id .t-record {
+  font-size: .58rem; font-weight: 700; color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
 
 /* Favorite star toggle */
 .fav-btn {
@@ -370,6 +374,7 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
 .game-cell .ind.at { color: var(--accent); }
 .game-cell .ind.nt { color: #a855f7; }
 .game-cell .rank { font-size: .58rem; font-weight: 800; color: #ef4444; }
+.game-cell .kick { font-size: .56rem; font-weight: 600; color: var(--text-dim); opacity: .85; }
 
 /* Win / loss / tie result badge, pinned to the cell's top-left corner. */
 .game-cell.has-result img { opacity: .82; }
@@ -408,10 +413,12 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
   /* Scale helmets + type with the viewport, tastefully. */
   .team-id img { width: clamp(24px, 2.8vw, 34px); height: auto; }
   .team-id .t-abbr { font-size: clamp(.6rem, .82vw, .72rem); }
+  .team-id .t-record { font-size: clamp(.52rem, .7vw, .62rem); }
 
   .game-cell img { width: clamp(26px, 3.4vw, 44px); height: auto; }
   .game-cell .ind { font-size: clamp(.56rem, .92vw, .72rem); }
   .game-cell .rank { font-size: clamp(.52rem, .78vw, .6rem); }
+  .game-cell .kick { font-size: clamp(.5rem, .74vw, .6rem); }
 
   .grid thead th { font-size: clamp(.62rem, .9vw, .78rem); }
   .grid thead th .wk-date { font-size: clamp(.54rem, .74vw, .64rem); }
@@ -468,6 +475,7 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
   .team-inner { padding: .6rem .4rem; gap: .35rem; }
   .team-id img { width: 40px; height: 40px; }
   .team-id .t-abbr { font-size: .78rem; }
+  .team-id .t-record { font-size: .66rem; }
   .fav-btn { font-size: 1.2rem; padding: 2px; }
 
   .grid thead th { font-size: .82rem; padding: .6rem .4rem; }
@@ -478,6 +486,7 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
   .game-cell img { width: 56px; height: 56px; }
   .game-cell .ind { font-size: .8rem; }
   .game-cell .rank { font-size: .72rem; }
+  .game-cell .kick { font-size: .7rem; }
   .bye { font-size: .72rem; }
 }
 

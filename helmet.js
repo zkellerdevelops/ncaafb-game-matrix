@@ -246,6 +246,8 @@ async function fetchTeamSchedule(team) {
     const opp = competitors.find((c) => c.team && c.team.id !== team.id);
     if (!opp) continue;
     const status = (e.status || comp.status || {}).type || {};
+    // ESPN flags an unset kickoff with timeValid=false (time defaults to noon/midnight).
+    const timeTbd = comp.timeValid === false || e.timeValid === false;
     const scoreStr = (c) => {
       const s = c && c.score;
       if (s == null) return null;
@@ -256,6 +258,7 @@ async function fetchTeamSchedule(team) {
       homeAway: me ? me.homeAway : "home",
       neutral: comp.neutralSite === true,
       date: e.date,
+      timeTbd,
       rank: opp.curatedRank ? opp.curatedRank.current : 99,
       completed: status.completed === true,
       won: me ? me.winner === true : null,
@@ -307,6 +310,17 @@ function cellHtml(game, dark) {
   const when = game.date
     ? new Date(game.date).toLocaleDateString(undefined, { month: "short", day: "numeric" })
     : "";
+
+  // Kickoff time for upcoming games (hidden once a game is completed).
+  let kick = "";
+  if (!game.completed && game.date) {
+    const d = new Date(game.date);
+    if (!Number.isNaN(d.getTime())) {
+      kick = game.timeTbd
+        ? "TBD"
+        : d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+    }
+  }
   const title = `${game.neutral ? "vs" : game.homeAway === "away" ? "@" : "vs"} ${opp.displayName || name}${
     ranked ? ` (#${game.rank})` : ""
   }${result ? ` — ${result.letter}${result.score ? " " + result.score : ""}` : when ? ` — ${when}` : ""}`;
@@ -322,7 +336,20 @@ function cellHtml(game, dark) {
       <img src="${src}" alt="${esc(name)}" loading="lazy"
            onerror="this.onerror=null;this.src='${dark2}';" />
       <span class="ind ${cls}">${ind} ${esc(name)}</span>
+      ${kick ? `<span class="kick">${esc(kick)}</span>` : ""}
     </div>`;
+}
+
+// Win-loss record from a team's completed games (e.g. "3-1").
+function teamRecord(row) {
+  let w = 0, l = 0;
+  for (const wk of Object.keys(row)) {
+    const g = row[wk];
+    if (!g || !g.completed) continue;
+    if (g.won === true) w++;
+    else if (g.won === false) l++;
+  }
+  return w + l ? `${w}-${l}` : "";
 }
 
 function render() {
@@ -344,6 +371,7 @@ function render() {
   const body = orderedTeams().map((team) => {
     const row = state.grid[team.id] || {};
     const isFav = team.id === state.favoriteId;
+    const record = teamRecord(row);
     const cells = state.weeks
       .map(
         (wk) =>
@@ -363,6 +391,7 @@ function render() {
               <img src="${logoUrl(team.id, dark)}" alt=""
                    onerror="this.onerror=null;this.src='${logoUrl(team.id, !dark)}';" />
               <span class="t-abbr">${esc(team.abbr)}</span>
+              ${record ? `<span class="t-record">${record}</span>` : ""}
             </div>
           </div>
         </th>
