@@ -229,6 +229,9 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
   background: var(--surface);
   flex: 1 1 auto;
   min-height: 0; /* fills the remaining height and scrolls internally */
+  width: fit-content; /* hug the table so there's no empty surface to the right */
+  max-width: 100%;
+  align-self: flex-start;
 }
 .grid {
   border-collapse: separate;
@@ -368,6 +371,34 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
 
 @media (max-width: 640px) {
   .result { min-width: 22px; height: 22px; font-size: .8rem; border-radius: 6px; }
+}
+
+/* ---------- Desktop: fit the whole matrix to the viewport width ---------- */
+@media (min-width: 641px) {
+  .grid-wrap { width: auto; align-self: stretch; } /* fill the container, no right gap */
+  .grid { width: 100%; table-layout: fixed; }      /* columns share the width evenly */
+
+  .corner, .team-cell { width: clamp(84px, 8vw, 110px); min-width: 0; max-width: none; }
+  .cell { min-width: 0; }
+
+  /* Scale helmets + type with the viewport, tastefully. */
+  .team-id img { width: clamp(24px, 2.8vw, 34px); height: auto; }
+  .team-id .t-abbr { font-size: clamp(.6rem, .82vw, .72rem); }
+
+  .game-cell img { width: clamp(26px, 3.4vw, 44px); height: auto; }
+  .game-cell .ind { font-size: clamp(.56rem, .92vw, .72rem); }
+  .game-cell .rank { font-size: clamp(.52rem, .78vw, .6rem); }
+
+  .grid thead th { font-size: clamp(.62rem, .9vw, .78rem); }
+  .grid thead th .wk-date { font-size: clamp(.54rem, .74vw, .64rem); }
+
+  .result {
+    min-width: clamp(15px, 1.5vw, 18px);
+    height: clamp(15px, 1.5vw, 18px);
+    font-size: clamp(.56rem, .82vw, .66rem);
+  }
+
+  .fav-btn { font-size: clamp(.85rem, 1.1vw, 1.05rem); }
 }
 
 .bye {
