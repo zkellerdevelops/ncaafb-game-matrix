@@ -8,21 +8,23 @@
   <link rel="stylesheet" href="helmet.css" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <h1 class="brand-title">CFB Helmet Schedule</h1>
-      <div class="header-controls">
-        <div id="header-actions" class="header-actions">
-          <a class="text-btn" href="scoreboard.html" title="Live scoreboard">Scoreboard ↗</a>
-          <button id="refresh-btn" class="icon-btn" type="button" title="Refresh" aria-label="Refresh schedule">↻</button>
-          <button id="theme-btn" class="icon-btn" type="button" title="Toggle light / dark" aria-label="Toggle light or dark mode">🌗</button>
+  <div id="top-chrome" class="top-chrome">
+    <header class="site-header">
+      <div class="header-inner">
+        <h1 class="brand-title">CFB Helmet Schedule</h1>
+        <div class="header-controls">
+          <div id="header-actions" class="header-actions">
+            <a class="text-btn" href="scoreboard.html" title="Live scoreboard">Scoreboard ↗</a>
+            <button id="refresh-btn" class="icon-btn" type="button" title="Refresh" aria-label="Refresh schedule">↻</button>
+            <button id="theme-btn" class="icon-btn" type="button" title="Toggle light / dark" aria-label="Toggle light or dark mode">🌗</button>
+          </div>
+          <button id="menu-btn" class="icon-btn menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="header-actions">☰</button>
         </div>
-        <button id="menu-btn" class="icon-btn menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="header-actions">☰</button>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <nav id="conf-tabs" class="conf-tabs" aria-label="Conference"></nav>
+    <nav id="conf-tabs" class="conf-tabs" aria-label="Conference"></nav>
+  </div>
 
   <main class="content">
     <div class="legend">

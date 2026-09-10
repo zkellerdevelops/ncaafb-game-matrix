@@ -64,17 +64,27 @@ body {
   background: var(--bg);
   color: var(--text);
   line-height: 1.4;
-  min-height: 100vh;
+  height: 100vh;
+  height: 100dvh; /* bounded so the matrix scrolls inside .grid-wrap, not the window */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: background .2s ease, color .2s ease;
 }
 
 /* ---------- Header ---------- */
-.site-header {
-  position: sticky;
-  top: 0;
+/* Header + tabs live in one bar that slides up out of view on scroll-down
+   and returns on scroll-up, so the matrix gets the reclaimed space. */
+.top-chrome {
+  position: relative;
   z-index: 30;
+  flex: 0 0 auto;
+  transition: margin-top .28s ease;
+}
+body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); }
+
+.site-header {
+  position: relative;
   background: color-mix(in srgb, var(--surface) 90%, transparent);
   backdrop-filter: saturate(1.4) blur(8px);
   border-bottom: 1px solid var(--border);
@@ -144,16 +154,12 @@ body {
 
 /* ---------- Conference tabs ---------- */
 .conf-tabs {
-  position: sticky;
-  top: 57px; /* sits just under the sticky header */
-  z-index: 9;
   display: flex;
   gap: .35rem;
   max-width: 1400px;
   margin: 0 auto;
   padding: .55rem 1rem;
   background: color-mix(in srgb, var(--bg) 92%, transparent);
-  backdrop-filter: saturate(1.4) blur(8px);
 }
 .tab {
   border: 1px solid var(--border);
@@ -176,11 +182,14 @@ body {
 
 /* ---------- Layout ---------- */
 .content {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0; /* allow the grid to shrink/scroll within the flex column */
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .legend {
@@ -218,12 +227,13 @@ body {
   border-radius: 14px;
   box-shadow: var(--shadow);
   background: var(--surface);
-  max-height: calc(100vh - 250px);
+  flex: 1 1 auto;
+  min-height: 0; /* fills the remaining height and scrolls internally */
 }
 .grid {
   border-collapse: separate;
   border-spacing: 0;
-  width: 100%;
+  width: auto; /* size columns to content instead of stretching to fill */
 }
 .grid th, .grid td {
   border-bottom: 1px solid var(--border);
@@ -255,8 +265,8 @@ body {
   z-index: 10;
   background: var(--team-col-bg);
   text-align: left;
-  min-width: 132px;
-  max-width: 132px;
+  min-width: 110px;
+  max-width: 110px;
   /* Cast a shadow over the scrolling helmets so the column clearly floats on top. */
   box-shadow: 6px 0 10px -4px var(--team-col-shadow);
 }
@@ -317,7 +327,7 @@ body {
 .grid tbody tr.is-fav .cell.current-col { background: var(--highlight); }
 
 /* Game cells */
-.cell { padding: .3rem; min-width: 58px; }
+.cell { padding: .3rem; min-width: 92px; }
 .cell.current-col { background: var(--highlight); }
 thead th.current-col { background: var(--highlight); color: var(--text); box-shadow: inset 0 -3px 0 var(--highlight-line); }
 
@@ -338,8 +348,8 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
 .game-cell.has-result img { opacity: .82; }
 .result {
   position: absolute;
-  top: -2px;
-  left: -2px;
+  top: -10px;
+  left: 4px;
   min-width: 17px;
   height: 17px;
   padding: 0 3px;
@@ -399,7 +409,7 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
 
   /* Bigger, easier-to-tap tiles on phones. */
   .content { padding: .75rem .5rem; }
-  .grid-wrap { max-height: calc(100vh - 220px); border-radius: 12px; }
+  .grid-wrap { border-radius: 12px; }
 
   .corner, .team-cell { min-width: 108px; max-width: 108px; }
   .team-inner { padding: .6rem .4rem; gap: .35rem; }

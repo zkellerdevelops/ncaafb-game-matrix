@@ -85,6 +85,8 @@ function confTeams() {
 
 const els = {
   grid: document.getElementById("grid"),
+  gridWrap: document.getElementById("grid-wrap"),
+  topChrome: document.getElementById("top-chrome"),
   tabs: document.getElementById("conf-tabs"),
   status: document.getElementById("status"),
   refresh: document.getElementById("refresh-btn"),
@@ -92,6 +94,33 @@ const els = {
   menuBtn: document.getElementById("menu-btn"),
   headerActions: document.getElementById("header-actions"),
 };
+
+/* ---------- Headroom: hide the header/tabs on scroll-down, reveal on scroll-up ---------- */
+function initHeadroom() {
+  const measure = () =>
+    document.documentElement.style.setProperty("--chrome-h", `${els.topChrome.offsetHeight}px`);
+  measure();
+  window.addEventListener("resize", measure);
+
+  let lastY = 0;
+  const THRESHOLD = 6;
+  els.gridWrap.addEventListener(
+    "scroll",
+    () => {
+      const y = els.gridWrap.scrollTop;
+      if (y <= 4) {
+        document.body.classList.remove("chrome-hidden"); // always show at the top
+      } else if (y > lastY + THRESHOLD) {
+        document.body.classList.add("chrome-hidden"); // scrolling down
+        setMenu(false); // close the mobile menu when the header hides
+      } else if (y < lastY - THRESHOLD) {
+        document.body.classList.remove("chrome-hidden"); // scrolling up
+      }
+      lastY = y;
+    },
+    { passive: true }
+  );
+}
 
 /* ---------- Mobile hamburger menu (header links/buttons only) ---------- */
 function setMenu(open) {
@@ -415,4 +444,5 @@ els.grid.addEventListener("click", (e) => {
 
 initTheme();
 renderTabs();
+initHeadroom();
 load();
