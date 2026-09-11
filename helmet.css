@@ -496,8 +496,8 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
   .content { padding: .75rem .5rem; }
   .grid-wrap { border-radius: 12px; }
 
-  .corner, .team-cell { min-width: 108px; max-width: 108px; }
-  .team-inner { padding: .6rem .4rem; gap: .35rem; }
+  .corner, .team-cell { min-width: 80px; max-width: 80px; }
+  .team-inner { padding: .6rem .3rem; gap: .35rem; }
   .team-id img { width: 40px; height: 40px; }
   .team-id .t-abbr { font-size: .78rem; }
   .team-id .t-record { font-size: .66rem; }
@@ -517,7 +517,7 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
 
 /* Extra-large helmets on the smallest phones. */
 @media (max-width: 400px) {
-  .corner, .team-cell { min-width: 96px; max-width: 96px; }
+  .corner, .team-cell { min-width: 76px; max-width: 76px; }
   .cell { min-width: 96px; }
   .game-cell img { width: 62px; height: 62px; }
 }
