@@ -156,7 +156,7 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
 }
 .text-btn:hover { color: var(--accent); background: var(--surface-2); }
 
-/* Unified header action: emoji icon + label (link and buttons share this). */
+/* Unified header action: SVG icon + label (link and buttons share this). */
 .action {
   display: inline-flex;
   align-items: center;
@@ -178,7 +178,7 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
 .action:active { transform: scale(.96); }
 .action:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .action:disabled { opacity: .55; cursor: default; }
-.action-ico { font-size: 1.05rem; line-height: 1; }
+.action-ico { width: 15px; height: 15px; flex: 0 0 auto; color: currentColor; }
 
 /* ---------- Footer ---------- */
 .site-footer {

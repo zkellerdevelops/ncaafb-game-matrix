@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CFB Scoreboard</title>
   <meta name="description" content="A responsive, live-updating college football scoreboard: teams, AP rankings, scores, and where each game is played." />
+  <link rel="icon" type="image/png" href="shared/assets/Helmet%20logo.png" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -13,9 +14,9 @@
       <h1 class="brand-title">Scoreboard</h1>
       <div class="header-controls">
         <div id="header-actions" class="header-actions">
-          <a class="action" href="index.html" title="Helmet schedule"><span class="action-ico" aria-hidden="true">🏈</span>Helmet Schedule</a>
-          <button id="refresh-btn" class="action" type="button" title="Refresh" aria-label="Refresh scoreboard"><span class="action-ico" aria-hidden="true">🔄</span>Refresh</button>
-          <button id="theme-btn" class="action" type="button" title="Toggle light / dark" aria-label="Toggle light or dark mode"><span class="action-ico" aria-hidden="true">🌗</span>Theme</button>
+          <a class="action" href="index.html" title="Helmet schedule"><svg class="action-ico" viewBox="0 0 12 13" fill="none" aria-hidden="true"><path d="M9.33312 1.36825V0H8V1.36825H4V0H2.66688V1.36825H0V13H12V1.36825H9.33312ZM10.6669 11.6318H1.3331V6.1581H10.6662V11.6318H10.6669Z" fill="currentColor"/></svg>Helmet Schedule</a>
+          <button id="refresh-btn" class="action" type="button" title="Refresh" aria-label="Refresh scoreboard"><svg class="action-ico" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M8.271 2.706L7.041 3.925H10.996V0L9.706 1.281L9.705 1.279C8.652 0.45 7.36 0 6 0C2.691 0 0 2.691 0 6C0 9.309 2.691 12 6 12C9.309 12 12 9.309 12 6H10C10 8.206 8.206 10 6 10C3.794 10 2 8.206 2 6C2 3.794 3.794 2 6 2C6.823 2 7.609 2.248 8.271 2.706Z" fill="currentColor"/></svg>Refresh</button>
+          <button id="theme-btn" class="action" type="button" title="Toggle light / dark" aria-label="Toggle light or dark mode"><svg class="action-ico" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M9 5.99998C9 6.79697 8.68773 7.54684 8.12081 8.11072C7.63058 8.59896 6.98355 8.90432 6.29898 8.97082L6 9V3L6.29932 3.02918C6.98353 3.09568 7.63059 3.40104 8.12115 3.88928C8.68775 4.45318 9 5.20297 9 5.99998Z" fill="currentColor"/><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="2"/></svg>Theme</button>
         </div>
         <button id="menu-btn" class="icon-btn menu-btn" type="button" aria-label="Menu" aria-expanded="false" aria-controls="header-actions">☰</button>
       </div>
