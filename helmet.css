@@ -228,30 +228,40 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
 }
 .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-/* ---------- League toggle (College / NFL) ---------- */
-.league-toggle {
-  display: flex;
-  gap: .35rem;
+/* ---------- League toggle (College / NFL) — segmented control ---------- */
+.league-toggle-row {
   max-width: 1400px;
   margin: 0 auto;
   padding: .5rem 1rem 0;
 }
+.league-toggle {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+}
 .league-btn {
   flex: 0 0 auto;
-  border: 1px solid var(--border);
-  background: var(--surface);
+  border: none;
+  background: transparent;
   color: var(--text-dim);
   font-size: .74rem;
   font-weight: 800;
   letter-spacing: .04em;
   text-transform: uppercase;
-  padding: .34rem .8rem;
-  border-radius: 8px;
+  padding: .38rem .95rem;
+  border-radius: 999px;
   cursor: pointer;
-  transition: background .15s ease, color .15s ease, border-color .15s ease;
+  transition: background .15s ease, color .15s ease, box-shadow .15s ease;
 }
-.league-btn:hover { border-color: var(--accent); color: var(--text); }
-.league-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.league-btn:hover { color: var(--text); }
+.league-btn.active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .18);
+}
 .league-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 /* ---------- Layout ---------- */
