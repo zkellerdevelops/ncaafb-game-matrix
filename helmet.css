@@ -246,7 +246,9 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
 }
 .league-toggle {
   display: inline-flex;
+  align-items: stretch;
   gap: 2px;
+  height: 40px; /* match the theme button */
   padding: 4px;
   border-radius: 999px;
 }
@@ -266,6 +268,8 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
 .fab-icon-btn .action-ico { width: 17px; height: 17px; }
 .league-btn {
   flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
   border: none;
   background: transparent;
   color: var(--text-dim);
@@ -273,7 +277,7 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
   font-weight: 800;
   letter-spacing: .04em;
   text-transform: uppercase;
-  padding: .38rem .95rem;
+  padding: 0 .95rem;
   border-radius: 999px;
   cursor: pointer;
   transition: background .15s ease, color .15s ease, box-shadow .15s ease;
