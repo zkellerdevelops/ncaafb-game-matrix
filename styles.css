@@ -140,6 +140,33 @@ body {
 .action:disabled { opacity: .55; cursor: default; }
 .action-ico { width: 15px; height: 15px; flex: 0 0 auto; color: currentColor; }
 
+/* ---------- League toggle (College / NFL) ---------- */
+.league-toggle {
+  display: flex;
+  gap: .35rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: .5rem 1rem 0;
+}
+.league-btn {
+  flex: 0 0 auto;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-dim);
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  padding: .34rem .8rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.league-btn:hover { border-color: var(--accent); color: var(--text); }
+.league-btn.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+.league-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
 /* ---------- Conference tabs ---------- */
 .conf-tabs {
   display: flex;

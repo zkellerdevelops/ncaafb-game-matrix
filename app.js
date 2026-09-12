@@ -1,30 +1,17 @@
 /* CFB live scoreboard — pulls live data from ESPN's public scoreboard API. */
 
-// Conferences (ESPN "groups" ids) — kept in sync with the helmet schedule.
-const CONFERENCES = {
-  sec: { label: "SEC", group: 8 },
-  big10: { label: "Big Ten", group: 5 },
-  acc: { label: "ACC", group: 1 },
-  big12: { label: "Big 12", group: 4 },
-  mwc: { label: "Mountain West", group: 17 },
-  aac: { label: "American", group: 151 },
-  sunbelt: { label: "Sun Belt", group: 37 },
-  mac: { label: "MAC", group: 15 },
-  cusa: { label: "C-USA", group: 12 },
-  independents: { label: "Independents", group: 18 },
-};
-const CONF_KEY = "cfb-conference"; // shared with the helmet schedule page
-
-// Start on whichever conference was last viewed on either page.
-let confKey = localStorage.getItem(CONF_KEY) || "sec";
-if (!CONFERENCES[confKey]) confKey = "sec";
-let conf = CONFERENCES[confKey];
+// League + conference data live in leagues.js (global LEAGUES); this page and
+// the helmet schedule share the same selection via localStorage.
+let { leagueKey, confKey } = initialSelection();
+let league = LEAGUES[leagueKey];
+let conf = league.conferences[confKey];
 
 const els = {
   matrix: document.getElementById("matrix"),
   status: document.getElementById("status"),
   weekLabel: document.getElementById("week-label"),
   tabs: document.getElementById("conf-tabs"),
+  leagueToggle: document.getElementById("league-toggle"),
   refresh: document.getElementById("refresh-btn"),
   theme: document.getElementById("theme-btn"),
   menuBtn: document.getElementById("menu-btn"),
@@ -165,7 +152,10 @@ async function load() {
   els.refresh.disabled = true;
   const loadingConf = confKey; // guard against stale responses after a tab switch
   try {
-    const url = `https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?groups=${conf.group}&limit=100`;
+    // College filters by conference group; the NFL scoreboard returns every
+    // game, so we filter it down to the selected division's teams client-side.
+    const base = `https://site.api.espn.com/apis/site/v2/sports/football/${league.sport}/scoreboard`;
+    const url = conf.group != null ? `${base}?groups=${conf.group}&limit=100` : `${base}?limit=100`;
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
@@ -176,7 +166,16 @@ async function load() {
     els.weekLabel.textContent =
       `${conf.label}${week ? ` · Week ${week}` : ""}${season ? ` · ${season}` : ""}`;
 
-    const events = (data.events || []).slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+    let events = (data.events || []).slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+    if (conf.group == null) {
+      // NFL: keep only games involving a team in this division.
+      const ids = new Set(conf.teams.map((t) => t.id));
+      events = events.filter((e) =>
+        ((e.competitions && e.competitions[0] && e.competitions[0].competitors) || []).some(
+          (c) => c.team && ids.has(c.team.id)
+        )
+      );
+    }
     if (!events.length) {
       els.matrix.innerHTML = "";
       setStatus(`No ${conf.label} games scheduled for this week.`, false);
@@ -207,9 +206,37 @@ function scheduleLiveRefresh(anyLive) {
 
 els.refresh.addEventListener("click", load);
 
+/* ---------- League toggle (College / NFL) ---------- */
+function renderLeagueToggle() {
+  els.leagueToggle.innerHTML = Object.entries(LEAGUES)
+    .map(
+      ([key, lg]) =>
+        `<button class="league-btn ${key === leagueKey ? "active" : ""}" type="button"
+                 data-league="${key}" aria-pressed="${key === leagueKey}">${lg.label}</button>`
+    )
+    .join("");
+}
+function switchLeague(key) {
+  if (!LEAGUES[key] || key === leagueKey) return;
+  leagueKey = key;
+  league = LEAGUES[key];
+  confKey = confForLeague(key);
+  conf = league.conferences[confKey];
+  localStorage.setItem(LEAGUE_KEY, key);
+  rememberConf(key, confKey);
+  clearTimeout(liveTimer);
+  renderLeagueToggle();
+  renderTabs();
+  load();
+}
+els.leagueToggle.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-league]");
+  if (btn) switchLeague(btn.getAttribute("data-league"));
+});
+
 /* ---------- Conference tabs ---------- */
 function renderTabs() {
-  els.tabs.innerHTML = Object.entries(CONFERENCES)
+  els.tabs.innerHTML = Object.entries(league.conferences)
     .map(
       ([key, c]) =>
         `<button class="tab ${key === confKey ? "active" : ""}" type="button"
@@ -218,10 +245,10 @@ function renderTabs() {
     .join("");
 }
 function switchConference(key) {
-  if (!CONFERENCES[key] || key === confKey) return;
+  if (!league.conferences[key] || key === confKey) return;
   confKey = key;
-  conf = CONFERENCES[key];
-  localStorage.setItem(CONF_KEY, key);
+  conf = league.conferences[key];
+  rememberConf(leagueKey, key);
   clearTimeout(liveTimer); // stop polling the conference we just left
   renderTabs();
   load();
@@ -232,5 +259,6 @@ els.tabs.addEventListener("click", (e) => {
 });
 
 initTheme();
+renderLeagueToggle();
 renderTabs();
 load();
