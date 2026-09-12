@@ -159,7 +159,7 @@ body {
 .action:disabled { opacity: .55; cursor: default; }
 .action-ico { width: 15px; height: 15px; flex: 0 0 auto; color: currentColor; }
 
-/* ---------- Floating action group: league toggle + theme ---------- */
+/* ---------- Floating action group: league toggle + separate theme button ---------- */
 .fab-group {
   position: fixed;
   left: 50%;
@@ -168,31 +168,34 @@ body {
   z-index: 50;
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px;
-  background: var(--surface-2);
+  gap: 10px; /* space between the league pill and the standalone theme button */
+}
+.league-toggle,
+.fab-icon-btn {
   border: 1px solid var(--border);
-  border-radius: 999px;
+  background: var(--surface-2);
   box-shadow: 0 10px 28px rgba(0, 0, 0, .30), 0 2px 8px rgba(0, 0, 0, .18);
 }
-.league-toggle { display: inline-flex; gap: 2px; }
+.league-toggle {
+  display: inline-flex;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 999px;
+}
 .fab-icon-btn {
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
-  border: none;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: var(--surface);
   color: var(--text);
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, .18);
   transition: color .15s ease, background .15s ease;
 }
 .fab-icon-btn:hover { color: var(--accent); }
 .fab-icon-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-.fab-icon-btn .action-ico { width: 16px; height: 16px; }
+.fab-icon-btn .action-ico { width: 17px; height: 17px; }
 .league-btn {
   flex: 0 0 auto;
   border: none;
