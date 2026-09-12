@@ -12,6 +12,12 @@
       "sizes": "200x200",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "shared/assets/Helmet%20logo-512px.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
