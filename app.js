@@ -39,6 +39,31 @@ els.theme.addEventListener("click", () => {
 /* ---------- Rendering ---------- */
 const UNRANKED = 99; // ESPN uses 99 for "not in the poll".
 
+// Is a game currently in progress?
+function isLiveEvent(e) {
+  return !!(e.status && e.status.type && e.status.type.state === "in");
+}
+// Best (lowest) AP rank across an event's two teams; UNRANKED if neither is ranked.
+function bestRank(e) {
+  const comps = (e.competitions && e.competitions[0] && e.competitions[0].competitors) || [];
+  let best = UNRANKED;
+  for (const c of comps) {
+    const r = c.curatedRank ? c.curatedRank.current : UNRANKED;
+    if (r && r < best) best = r;
+  }
+  return best;
+}
+// Live games first (ranked matchups on top), then everything else by kickoff.
+function scoreboardOrder(a, b) {
+  const la = isLiveEvent(a), lb = isLiveEvent(b);
+  if (la !== lb) return la ? -1 : 1;
+  if (la && lb) {
+    const ra = bestRank(a), rb = bestRank(b);
+    if (ra !== rb) return ra - rb;
+  }
+  return new Date(a.date) - new Date(b.date);
+}
+
 function formatKickoff(iso) {
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "TBD";
@@ -148,7 +173,7 @@ async function load() {
     els.weekLabel.textContent =
       `${conf.label}${week ? ` · Week ${week}` : ""}${season ? ` · ${season}` : ""}`;
 
-    let events = (data.events || []).slice().sort((a, b) => new Date(a.date) - new Date(b.date));
+    let events = (data.events || []).slice().sort(scoreboardOrder);
     if (conf.group == null) {
       // NFL: keep only games involving a team in this division.
       const ids = new Set(conf.teams.map((t) => t.id));
