@@ -239,6 +239,14 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
   display: inline-flex;
   align-items: center;
   gap: 10px; /* space between the league pill and the standalone theme button */
+  transition: transform .28s ease, opacity .28s ease;
+}
+/* At the bottom of the list the FAB slides below the content so the last row is
+   fully visible; it returns as soon as the user scrolls back up. */
+body.fab-tucked .fab-group {
+  transform: translateX(-50%) translateY(calc(100% + env(safe-area-inset-bottom, 0px) + 2.75rem));
+  opacity: 0;
+  pointer-events: none;
 }
 .league-toggle,
 .fab-icon-btn {
@@ -345,9 +353,6 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
   max-width: 100%;
   align-self: flex-start;
 }
-/* When the table overflows, reserve scroll space at the very end so the last row
-   can clear the floating action group. The FAB still overlays rows mid-scroll. */
-.grid-wrap.has-overflow { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 4.5rem); }
 .grid {
   border-collapse: separate;
   border-spacing: 0;

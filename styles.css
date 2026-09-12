@@ -170,6 +170,13 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 10px; /* space between the league pill and the standalone theme button */
+  transition: transform .28s ease, opacity .28s ease;
+}
+/* At the bottom of the page the FAB slides away so the last content is visible. */
+body.fab-tucked .fab-group {
+  transform: translateX(-50%) translateY(calc(100% + env(safe-area-inset-bottom, 0px) + 2.25rem));
+  opacity: 0;
+  pointer-events: none;
 }
 .league-toggle,
 .fab-icon-btn {
@@ -294,8 +301,7 @@ body {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  /* Extra bottom room so content clears the floating action group. */
-  padding: 1.25rem 1rem calc(env(safe-area-inset-bottom, 0px) + 5rem);
+  padding: 1.25rem 1rem 2rem;
 }
 
 .status {

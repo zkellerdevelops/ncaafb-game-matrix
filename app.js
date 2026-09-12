@@ -240,6 +240,18 @@ els.tabs.addEventListener("click", (e) => {
   if (btn) switchConference(btn.getAttribute("data-conf"));
 });
 
+// Tuck the floating action group away near the bottom of the page so the last
+// cards aren't blocked; it slides back as soon as the user scrolls up.
+window.addEventListener(
+  "scroll",
+  () => {
+    const de = document.documentElement;
+    const max = de.scrollHeight - window.innerHeight;
+    document.body.classList.toggle("fab-tucked", max > 8 && max - window.scrollY <= 96);
+  },
+  { passive: true }
+);
+
 initTheme();
 renderLeagueToggle();
 renderTabs();

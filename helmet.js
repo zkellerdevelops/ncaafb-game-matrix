@@ -30,10 +30,8 @@ const els = {
 
 /* ---------- Headroom: hide the header/tabs on scroll-down, reveal on scroll-up ---------- */
 function initHeadroom() {
-  const measure = () => {
+  const measure = () =>
     document.documentElement.style.setProperty("--chrome-h", `${els.topChrome.offsetHeight}px`);
-    if (state.built) updateFabClearance(); // table fit vs viewport can change on resize
-  };
   measure();
   window.addEventListener("resize", measure);
 
@@ -58,6 +56,10 @@ function initHeadroom() {
       } else if (y < lastY - THRESHOLD) {
         document.body.classList.remove("chrome-hidden"); // scrolling up
       }
+      // Tuck the floating action group away near the end so the last rows aren't
+      // blocked; it slides back as soon as the user scrolls up.
+      const maxScroll = els.gridWrap.scrollHeight - els.gridWrap.clientHeight;
+      document.body.classList.toggle("fab-tucked", maxScroll > 8 && maxScroll - y <= 96);
       lastY = y;
     },
     { passive: true }
@@ -419,16 +421,6 @@ function render() {
   }).join("");
 
   els.grid.innerHTML = head + `<tbody>${body}</tbody>`;
-  updateFabClearance();
-}
-
-// Reserve end-of-scroll clearance for the floating action group only when the
-// table actually overflows (so short conferences don't show empty space).
-function updateFabClearance() {
-  els.gridWrap.classList.remove("has-overflow");
-  if (els.grid.offsetHeight > els.gridWrap.clientHeight) {
-    els.gridWrap.classList.add("has-overflow");
-  }
 }
 
 function setStatus(msg, isError) {
