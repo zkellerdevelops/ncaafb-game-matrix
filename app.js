@@ -1,19 +1,30 @@
 /* CFB live scoreboard — pulls live data from ESPN's public scoreboard API. */
 
-// Match whichever conference was last viewed on the helmet schedule.
+// Conferences (ESPN "groups" ids) — kept in sync with the helmet schedule.
 const CONFERENCES = {
   sec: { label: "SEC", group: 8 },
   big10: { label: "Big Ten", group: 5 },
   acc: { label: "ACC", group: 1 },
+  big12: { label: "Big 12", group: 4 },
+  mwc: { label: "Mountain West", group: 17 },
+  aac: { label: "American", group: 151 },
+  sunbelt: { label: "Sun Belt", group: 37 },
+  mac: { label: "MAC", group: 15 },
+  cusa: { label: "C-USA", group: 12 },
+  independents: { label: "Independents", group: 18 },
 };
-const confKey = localStorage.getItem("cfb-conference") || "sec";
-const conf = CONFERENCES[confKey] || CONFERENCES.sec;
-const API_URL = `https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?groups=${conf.group}&limit=100`;
+const CONF_KEY = "cfb-conference"; // shared with the helmet schedule page
+
+// Start on whichever conference was last viewed on either page.
+let confKey = localStorage.getItem(CONF_KEY) || "sec";
+if (!CONFERENCES[confKey]) confKey = "sec";
+let conf = CONFERENCES[confKey];
 
 const els = {
   matrix: document.getElementById("matrix"),
   status: document.getElementById("status"),
   weekLabel: document.getElementById("week-label"),
+  tabs: document.getElementById("conf-tabs"),
   refresh: document.getElementById("refresh-btn"),
   theme: document.getElementById("theme-btn"),
   menuBtn: document.getElementById("menu-btn"),
@@ -152,10 +163,13 @@ function setStatus(msg, isError) {
 async function load() {
   setStatus("Loading matchups…", false);
   els.refresh.disabled = true;
+  const loadingConf = confKey; // guard against stale responses after a tab switch
   try {
-    const res = await fetch(API_URL, { cache: "no-store" });
+    const url = `https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard?groups=${conf.group}&limit=100`;
+    const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
+    if (loadingConf !== confKey) return; // a newer tab was selected mid-flight
 
     const season = data.season && data.season.year;
     const week = data.week && data.week.number;
@@ -193,5 +207,30 @@ function scheduleLiveRefresh(anyLive) {
 
 els.refresh.addEventListener("click", load);
 
+/* ---------- Conference tabs ---------- */
+function renderTabs() {
+  els.tabs.innerHTML = Object.entries(CONFERENCES)
+    .map(
+      ([key, c]) =>
+        `<button class="tab ${key === confKey ? "active" : ""}" type="button"
+                 data-conf="${key}" aria-pressed="${key === confKey}">${c.label}</button>`
+    )
+    .join("");
+}
+function switchConference(key) {
+  if (!CONFERENCES[key] || key === confKey) return;
+  confKey = key;
+  conf = CONFERENCES[key];
+  localStorage.setItem(CONF_KEY, key);
+  clearTimeout(liveTimer); // stop polling the conference we just left
+  renderTabs();
+  load();
+}
+els.tabs.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-conf]");
+  if (btn) switchConference(btn.getAttribute("data-conf"));
+});
+
 initTheme();
+renderTabs();
 load();
