@@ -30,8 +30,10 @@ const els = {
 
 /* ---------- Headroom: hide the header/tabs on scroll-down, reveal on scroll-up ---------- */
 function initHeadroom() {
-  const measure = () =>
+  const measure = () => {
     document.documentElement.style.setProperty("--chrome-h", `${els.topChrome.offsetHeight}px`);
+    if (state.built) updateFabClearance(); // table fit vs viewport can change on resize
+  };
   measure();
   window.addEventListener("resize", measure);
 
@@ -417,6 +419,16 @@ function render() {
   }).join("");
 
   els.grid.innerHTML = head + `<tbody>${body}</tbody>`;
+  updateFabClearance();
+}
+
+// Reserve end-of-scroll clearance for the floating action group only when the
+// table actually overflows (so short conferences don't show empty space).
+function updateFabClearance() {
+  els.gridWrap.classList.remove("has-overflow");
+  if (els.grid.offsetHeight > els.gridWrap.clientHeight) {
+    els.gridWrap.classList.add("has-overflow");
+  }
 }
 
 function setStatus(msg, isError) {
