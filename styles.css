@@ -145,7 +145,7 @@ body {
 .league-toggle {
   position: fixed;
   left: 50%;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
+  bottom: calc(env(safe-area-inset-bottom, 0px) + 2.25rem);
   transform: translateX(-50%);
   z-index: 50;
   display: inline-flex;
