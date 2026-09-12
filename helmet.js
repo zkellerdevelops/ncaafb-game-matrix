@@ -240,8 +240,14 @@ els.tabs.addEventListener("click", (e) => {
   if (btn) switchConference(btn.getAttribute("data-conf"));
 });
 
-function logoUrl(teamId, dark) {
-  return `https://a.espncdn.com/i/teamlogos/${currentLeague().logoPath}/500${dark ? "-dark" : ""}/${teamId}.png`;
+// Accepts either a roster team ({id, abbr}) or an ESPN opponent ({id, abbreviation}).
+// College logos are keyed by numeric id; NFL logos by lowercase abbreviation.
+function logoUrl(team, dark) {
+  const lg = currentLeague();
+  const slug = lg.logoBy === "abbr"
+    ? String(team.abbr || team.abbreviation || "").toLowerCase()
+    : team.id;
+  return `https://a.espncdn.com/i/teamlogos/${lg.logoPath}/500${dark ? "-dark" : ""}/${slug}.png`;
 }
 
 async function fetchJson(url) {
@@ -312,8 +318,8 @@ function weekHeaderLabel(wk, sorted) {
 function cellHtml(game, dark) {
   if (!game) return `<div class="bye">BYE</div>`;
   const opp = game.opp || {};
-  const dark2 = logoUrl(opp.id, !dark);
-  const src = logoUrl(opp.id, dark);
+  const dark2 = logoUrl(opp, !dark);
+  const src = logoUrl(opp, dark);
   const name = opp.abbreviation || opp.shortDisplayName || opp.displayName || "TBD";
   const ranked = game.rank && game.rank !== 99;
 
@@ -419,8 +425,8 @@ function render() {
                       title="${isFav ? "Unfavorite " + esc(team.name) : "Favorite " + esc(team.name) + " (pins to top)"}">
                 ${isFav ? "★" : "☆"}
               </button>
-              <img src="${logoUrl(team.id, dark)}" alt=""
-                   onerror="this.onerror=null;this.src='${logoUrl(team.id, !dark)}';" />
+              <img src="${logoUrl(team, dark)}" alt=""
+                   onerror="this.onerror=null;this.src='${logoUrl(team, !dark)}';" />
               <span class="t-abbr">${esc(team.abbr)}</span>
               ${record ? `<span class="t-record">${record}</span>` : ""}
             </div>

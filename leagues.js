@@ -12,6 +12,7 @@ const LEAGUES = {
     label: "College",
     sport: "college-football",
     logoPath: "ncaa",
+    logoBy: "id", // ESPN college logos are keyed by numeric team id
     conferences: {
       sec: {
         label: "SEC",
@@ -210,6 +211,7 @@ const LEAGUES = {
     label: "NFL",
     sport: "nfl",
     logoPath: "nfl",
+    logoBy: "abbr", // ESPN NFL logos are keyed by lowercase abbreviation (e.g. ten.png)
     conferences: {
       "afc-east": {
         label: "AFC East",
