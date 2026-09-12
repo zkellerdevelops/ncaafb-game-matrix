@@ -1,0 +1,17 @@
+{
+  "name": "Helmet Schedule",
+  "short_name": "Helmet",
+  "description": "College football & NFL schedules as a helmet matrix.",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1d4ed8",
+  "icons": [
+    {
+      "src": "shared/assets/Helmet%20logo.png",
+      "sizes": "200x200",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
