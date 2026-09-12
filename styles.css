@@ -181,7 +181,7 @@ body {
   display: inline-flex;
   align-items: stretch;
   gap: 2px;
-  height: 40px; /* match the theme button */
+  height: 48px; /* match the theme button */
   padding: 4px;
   border-radius: 999px;
 }
@@ -189,8 +189,8 @@ body {
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   color: var(--text);
   cursor: pointer;
