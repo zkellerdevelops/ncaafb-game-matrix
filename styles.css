@@ -159,22 +159,40 @@ body {
 .action:disabled { opacity: .55; cursor: default; }
 .action-ico { width: 15px; height: 15px; flex: 0 0 auto; color: currentColor; }
 
-/* ---------- League toggle (College / NFL) — floating segmented control ---------- */
-.league-toggle-row { display: contents; } /* the pill floats; wrapper reserves no space */
-.league-toggle {
+/* ---------- Floating action group: league toggle + theme ---------- */
+.fab-group {
   position: fixed;
   left: 50%;
   bottom: calc(env(safe-area-inset-bottom, 0px) + 2.25rem);
   transform: translateX(-50%);
   z-index: 50;
   display: inline-flex;
-  gap: 2px;
+  align-items: center;
+  gap: 6px;
   padding: 4px;
   background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: 999px;
   box-shadow: 0 10px 28px rgba(0, 0, 0, .30), 0 2px 8px rgba(0, 0, 0, .18);
 }
+.league-toggle { display: inline-flex; gap: 2px; }
+.fab-icon-btn {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .18);
+  transition: color .15s ease, background .15s ease;
+}
+.fab-icon-btn:hover { color: var(--accent); }
+.fab-icon-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.fab-icon-btn .action-ico { width: 16px; height: 16px; }
 .league-btn {
   flex: 0 0 auto;
   border: none;
