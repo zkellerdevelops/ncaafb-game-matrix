@@ -299,7 +299,8 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
   width: 100%;
   max-width: 1400px;
   margin: 0 auto;
-  padding: 1rem;
+  /* Extra bottom room so the last row scrolls clear of the floating action group. */
+  padding: 1rem 1rem calc(env(safe-area-inset-bottom, 0px) + 5rem);
   display: flex;
   flex-direction: column;
 }
@@ -550,7 +551,7 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
   .brand-title { min-width: 0; } /* let the title ellipsis rather than push actions off-screen */
 
   /* Bigger, easier-to-tap tiles on phones. */
-  .content { padding: .75rem .5rem; }
+  .content { padding: .75rem .5rem calc(env(safe-area-inset-bottom, 0px) + 5rem); }
   .grid-wrap { border-radius: 12px; }
 
   .corner, .team-cell { min-width: 80px; max-width: 80px; }
