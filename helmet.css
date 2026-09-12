@@ -309,6 +309,13 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
 }
 .grid thead th .wk-date { display: block; font-size: .62rem; font-weight: 500; opacity: .8; }
 
+/* Week headers are clickable to sort teams by that week's kickoff time. */
+.grid thead th.wk-head { cursor: pointer; user-select: none; }
+.grid thead th.wk-head:hover { color: var(--text); background: var(--surface); }
+.grid thead th.wk-head:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.grid thead th.wk-head.sorted { color: var(--accent); box-shadow: inset 0 -3px 0 var(--accent); }
+.grid thead th .sort-caret { font-size: .85em; margin-left: 3px; color: var(--accent); opacity: 1; vertical-align: middle; }
+
 /* Team (row header) — top-left corner + sticky first column */
 .corner, .team-cell {
   position: sticky;

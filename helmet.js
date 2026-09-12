@@ -336,9 +336,26 @@ function setFavorite(id) {
   state.favoriteId = getFavorite(state.confKey);
   if (state.built) render();
 }
-// Favorite first (only if it's in the current conference), rest alphabetical.
+// Sort key for a team's game in the week being sorted on: earliest kickoff first,
+// TBD times after known kickoffs, and byes (no game) last.
+function kickoffSortKey(team) {
+  const g = (state.grid[team.id] || {})[state.sortWeek];
+  if (!g || !g.date) return Number.POSITIVE_INFINITY; // bye / no game → bottom
+  const t = new Date(g.date).getTime();
+  if (Number.isNaN(t)) return Number.POSITIVE_INFINITY;
+  return g.timeTbd ? t + 1e12 : t; // undecided kickoff → after the known ones
+}
+
+// Favorite first (only if it's in the current conference); the rest either
+// alphabetical (default) or by the selected week's kickoff time.
 function orderedTeams() {
-  const teams = confTeams();
+  let teams = confTeams();
+  if (state.sortWeek != null) {
+    teams = teams.slice().sort((a, b) => {
+      const ka = kickoffSortKey(a), kb = kickoffSortKey(b);
+      return ka !== kb ? ka - kb : a.name.localeCompare(b.name);
+    });
+  }
   if (!state.favoriteId) return teams;
   const fav = teams.filter((t) => t.id === state.favoriteId);
   const rest = teams.filter((t) => t.id !== state.favoriteId);
@@ -354,6 +371,7 @@ const state = {
   built: false,
   confKey: localStorage.getItem(CONF_KEY) || "sec",
   favoriteId: getFavorite(localStorage.getItem(CONF_KEY) || "sec"),
+  sortWeek: null, // when set, rows sort by that week's kickoff (earliest first)
 };
 
 /* ---------- Conference tabs ---------- */
@@ -370,6 +388,7 @@ function switchConference(key) {
   if (!CONFERENCES[key] || key === state.confKey) return;
   state.confKey = key;
   state.favoriteId = getFavorite(key); // each conference keeps its own favorite
+  state.sortWeek = null; // reset kickoff sort when changing conferences
   localStorage.setItem(CONF_KEY, key);
   renderTabs();
   load();
@@ -433,7 +452,7 @@ function esc(s) {
   return String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 }
 
-function weekHeaderLabel(wk) {
+function weekHeaderLabel(wk, sorted) {
   const iso = state.weekDates[wk];
   let dateStr = "";
   if (iso) {
@@ -442,7 +461,10 @@ function weekHeaderLabel(wk) {
       dateStr = d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
     }
   }
-  return `Wk ${wk}${dateStr ? `<span class="wk-date">${dateStr}</span>` : ""}`;
+  const caret = sorted ? ` <span class="sort-caret" aria-hidden="true">▲</span>` : "";
+  // Keep the caret on the same line as the date (or the "Wk N" line when there's no date).
+  if (dateStr) return `Wk ${wk}<span class="wk-date">${dateStr}${caret}</span>`;
+  return `Wk ${wk}${caret}`;
 }
 
 function cellHtml(game, dark) {
@@ -521,10 +543,16 @@ function render() {
       <tr>
         <th class="corner">Team</th>
         ${state.weeks
-          .map(
-            (wk) =>
-              `<th class="${wk === state.currentWeek ? "current-col" : ""}">${weekHeaderLabel(wk)}</th>`
-          )
+          .map((wk) => {
+            const cls = [
+              "wk-head",
+              wk === state.currentWeek ? "current-col" : "",
+              wk === state.sortWeek ? "sorted" : "",
+            ].filter(Boolean).join(" ");
+            return `<th class="${cls}" data-wk="${wk}" role="button" tabindex="0"
+                        aria-sort="${wk === state.sortWeek ? "ascending" : "none"}"
+                        title="Sort teams by Week ${wk} kickoff (earliest first)">${weekHeaderLabel(wk, wk === state.sortWeek)}</th>`;
+          })
           .join("")}
       </tr>
     </thead>`;
@@ -627,10 +655,28 @@ els.refresh.addEventListener("click", load);
 // Toggle favorite from the star on each team row.
 els.grid.addEventListener("click", (e) => {
   const btn = e.target.closest("[data-fav-id]");
-  if (!btn) return;
-  const id = btn.getAttribute("data-fav-id");
-  setFavorite(id === state.favoriteId ? null : id);
+  if (btn) {
+    const id = btn.getAttribute("data-fav-id");
+    setFavorite(id === state.favoriteId ? null : id);
+    return;
+  }
+  // Click a week header to sort rows by that week's kickoff; click again to clear.
+  const wkHead = e.target.closest("th[data-wk]");
+  if (wkHead) toggleSortWeek(Number(wkHead.getAttribute("data-wk")));
 });
+// Keyboard: Enter/Space on a focused week header toggles the sort.
+els.grid.addEventListener("keydown", (e) => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const wkHead = e.target.closest("th[data-wk]");
+  if (!wkHead) return;
+  e.preventDefault();
+  toggleSortWeek(Number(wkHead.getAttribute("data-wk")));
+});
+function toggleSortWeek(wk) {
+  if (!wk) return;
+  state.sortWeek = state.sortWeek === wk ? null : wk;
+  if (state.built) render();
+}
 
 initTheme();
 renderTabs();
