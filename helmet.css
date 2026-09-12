@@ -176,6 +176,7 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
 .action:active { transform: scale(.96); }
 .action:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .action:disabled { opacity: .55; cursor: default; }
+.action.icon-only { width: 40px; padding: 0; gap: 0; justify-content: center; } /* no label, any width */
 .action-ico { width: 15px; height: 15px; flex: 0 0 auto; color: currentColor; }
 
 /* ---------- Footer ---------- */
@@ -536,10 +537,10 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
 @media (max-width: 640px) {
   .brand-title { font-size: 1.05rem; }
 
-  /* Collapse header actions to icon-only so they fit next to the title. */
+  /* Tighten header actions so the labeled nav link + icon-only refresh fit. */
   .header-actions { gap: .35rem; }
-  .action { width: 40px; padding: 0; gap: 0; justify-content: center; }
-  .action-label { display: none; }
+  .action { padding: 0 .55rem; height: 38px; font-size: .82rem; }
+  .action.icon-only { padding: 0; }
   .brand-title { min-width: 0; } /* let the title ellipsis rather than push actions off-screen */
 
   /* Bigger, easier-to-tap tiles on phones. */

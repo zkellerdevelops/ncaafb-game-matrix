@@ -155,6 +155,7 @@ body {
 .action:active { transform: scale(.96); }
 .action:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .action:disabled { opacity: .55; cursor: default; }
+.action.icon-only { width: 40px; padding: 0; gap: 0; justify-content: center; } /* no label, any width */
 .action-ico { width: 15px; height: 15px; flex: 0 0 auto; color: currentColor; }
 
 /* ---------- Floating action group: league toggle + separate theme button ---------- */
@@ -277,8 +278,8 @@ body {
 @media (max-width: 640px) {
   .brand-title { font-size: 1.05rem; min-width: 0; }
   .header-actions { gap: .35rem; }
-  .action { width: 40px; padding: 0; gap: 0; justify-content: center; }
-  .action-label { display: none; }
+  .action { padding: 0 .55rem; height: 38px; font-size: .82rem; }
+  .action.icon-only { padding: 0; }
 }
 
 /* ---------- Layout ---------- */
