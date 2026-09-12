@@ -80,13 +80,12 @@ body {
   font-size: 1.15rem;
   font-weight: 700;
   letter-spacing: -.01em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
   display: flex;
   align-items: center;
   gap: .55rem;
+  min-width: 0; /* allow the title to shrink so header actions stay on-screen */
 }
+.brand-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .brand-logo {
   flex: 0 0 auto;
   display: grid;
@@ -103,9 +102,8 @@ body {
   height: 24px;
   object-fit: contain;
 }
-.header-controls { display: flex; align-items: center; gap: .5rem; position: relative; }
+.header-controls { display: flex; align-items: center; gap: .5rem; position: relative; flex: 0 0 auto; }
 .header-actions { display: flex; align-items: center; gap: .5rem; }
-.icon-btn.menu-btn { display: none; } /* desktop: actions are inline, no hamburger */
 
 .icon-btn {
   width: 40px;
@@ -275,27 +273,12 @@ body {
   text-align: center;
 }
 
-/* ---------- Mobile: collapse header links/buttons into a hamburger ---------- */
+/* ---------- Mobile: keep header actions inline, just tighter ---------- */
 @media (max-width: 640px) {
-  .brand-title { font-size: 1.05rem; }
-  .icon-btn.menu-btn { display: grid; }
-  .header-actions {
-    position: absolute;
-    top: calc(100% + .5rem);
-    right: 0;
-    flex-direction: column;
-    align-items: stretch;
-    gap: .35rem;
-    padding: .4rem;
-    min-width: 180px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-    display: none;
-  }
-  .header-actions.open { display: flex; }
-  .header-actions .action { width: 100%; height: 44px; justify-content: flex-start; }
+  .brand-title { font-size: 1.05rem; min-width: 0; }
+  .header-actions { gap: .35rem; }
+  .action { width: 40px; padding: 0; gap: 0; justify-content: center; }
+  .action-label { display: none; }
 }
 
 /* ---------- Layout ---------- */

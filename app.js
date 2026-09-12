@@ -14,25 +14,7 @@ const els = {
   leagueToggle: document.getElementById("league-toggle"),
   refresh: document.getElementById("refresh-btn"),
   theme: document.getElementById("theme-btn"),
-  menuBtn: document.getElementById("menu-btn"),
-  headerActions: document.getElementById("header-actions"),
 };
-
-/* ---------- Mobile hamburger menu (header links/buttons only) ---------- */
-function setMenu(open) {
-  els.headerActions.classList.toggle("open", open);
-  els.menuBtn.setAttribute("aria-expanded", String(open));
-}
-els.menuBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
-  setMenu(!els.headerActions.classList.contains("open"));
-});
-els.headerActions.addEventListener("click", (e) => {
-  if (e.target.closest("a, button")) setMenu(false);
-});
-document.addEventListener("click", (e) => {
-  if (!e.target.closest(".header-controls")) setMenu(false);
-});
 
 /* ---------- Theme toggle: auto -> light -> dark -> auto ---------- */
 const THEME_KEY = "sec-matrix-theme";

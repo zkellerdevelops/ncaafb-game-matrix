@@ -26,8 +26,6 @@ const els = {
   status: document.getElementById("status"),
   refresh: document.getElementById("refresh-btn"),
   theme: document.getElementById("theme-btn"),
-  menuBtn: document.getElementById("menu-btn"),
-  headerActions: document.getElementById("header-actions"),
 };
 
 /* ---------- Headroom: hide the header/tabs on scroll-down, reveal on scroll-up ---------- */
@@ -55,7 +53,6 @@ function initHeadroom() {
         // hold current state near the bottom
       } else if (y > lastY + THRESHOLD) {
         document.body.classList.add("chrome-hidden"); // scrolling down
-        setMenu(false); // close the mobile menu when the header hides
       } else if (y < lastY - THRESHOLD) {
         document.body.classList.remove("chrome-hidden"); // scrolling up
       }
@@ -64,23 +61,6 @@ function initHeadroom() {
     { passive: true }
   );
 }
-
-/* ---------- Mobile hamburger menu (header links/buttons only) ---------- */
-function setMenu(open) {
-  els.headerActions.classList.toggle("open", open);
-  els.menuBtn.setAttribute("aria-expanded", String(open));
-}
-els.menuBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
-  setMenu(!els.headerActions.classList.contains("open"));
-});
-// Close after picking an action, or when tapping outside.
-els.headerActions.addEventListener("click", (e) => {
-  if (e.target.closest("a, button")) setMenu(false);
-});
-document.addEventListener("click", (e) => {
-  if (!e.target.closest(".header-controls")) setMenu(false);
-});
 
 /* ---------- Theme: auto -> light -> dark ---------- */
 const THEME_KEY = "sec-matrix-theme";
