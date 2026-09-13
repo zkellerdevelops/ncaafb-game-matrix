@@ -104,7 +104,6 @@ body {
   height: 24px;
   object-fit: contain;
 }
-.header-controls { display: flex; align-items: center; gap: .5rem; position: relative; flex: 0 0 auto; }
 .header-actions { display: flex; align-items: center; gap: .5rem; }
 
 .icon-btn {
@@ -160,35 +159,22 @@ body {
 .action.icon-only { width: 40px; padding: 0; gap: 0; justify-content: center; border-radius: 50%; } /* no label, circular, any width */
 .action-ico { width: 15px; height: 15px; flex: 0 0 auto; color: currentColor; }
 
-/* ---------- Floating action group: league toggle + separate theme button ---------- */
+/* ---------- Action group: league toggle + separate theme button ---------- */
 .fab-group {
-  position: fixed;
-  left: 50%;
-  bottom: calc(env(safe-area-inset-bottom, 0px) + 2.25rem);
-  transform: translateX(-50%);
-  z-index: 50;
   display: inline-flex;
   align-items: center;
   gap: 10px; /* space between the league pill and the standalone theme button */
-  transition: transform .28s ease, opacity .28s ease;
-}
-/* At the bottom of the page the FAB slides away so the last content is visible. */
-body.fab-tucked .fab-group {
-  transform: translateX(-50%) translateY(calc(100% + env(safe-area-inset-bottom, 0px) + 2.25rem));
-  opacity: 0;
-  pointer-events: none;
 }
 .league-toggle,
 .fab-icon-btn {
   border: 1px solid var(--fab-border, var(--border));
   background: var(--surface-2);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, .30), 0 2px 8px rgba(0, 0, 0, .18);
 }
 .league-toggle {
   display: inline-flex;
   align-items: stretch;
   gap: 2px;
-  height: 48px; /* match the theme button */
+  height: 40px; /* match the theme button */
   padding: 4px;
   border-radius: 999px;
 }
@@ -196,8 +182,8 @@ body.fab-tucked .fab-group {
   flex: 0 0 auto;
   display: grid;
   place-items: center;
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   color: var(--text);
   cursor: pointer;
@@ -274,17 +260,35 @@ body.fab-tucked .fab-group {
 }
 
 /* ---------- Footer ---------- */
+/* Docked nav footer: league toggle left, schedule/theme/refresh right, credits below.
+   Sticky to the viewport bottom so the controls stay reachable as the page scrolls. */
 .site-footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 40;
   border-top: 1px solid var(--border);
-  padding: .6rem 1rem;
+  background: color-mix(in srgb, var(--surface) 90%, transparent);
+  backdrop-filter: saturate(1.4) blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .4rem;
+  padding: .6rem 1rem calc(env(safe-area-inset-bottom, 0px) + .6rem);
 }
-.site-footer p {
-  margin: 0 auto;
+.footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  width: 100%;
   max-width: 1200px;
-  font-size: .7rem;
-  line-height: 1.35;
-  color: var(--text-dim);
-  text-align: center;
+  margin-inline: auto;
+}
+/* Schedule + refresh adopt the footer FAB styling (pill / circle, lighter border). */
+.site-footer .action {
+  border-color: var(--fab-border, var(--border));
+  background: var(--surface-2);
+  border-radius: 999px;
 }
 
 /* ---------- Mobile: keep header actions inline, just tighter ---------- */

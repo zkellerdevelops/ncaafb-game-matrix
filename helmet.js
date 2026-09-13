@@ -56,10 +56,6 @@ function initHeadroom() {
       } else if (y < lastY - THRESHOLD) {
         document.body.classList.remove("chrome-hidden"); // scrolling up
       }
-      // Tuck the floating action group away near the end so the last rows aren't
-      // blocked; it slides back as soon as the user scrolls up.
-      const maxScroll = els.gridWrap.scrollHeight - els.gridWrap.clientHeight;
-      document.body.classList.toggle("fab-tucked", maxScroll > 8 && maxScroll - y <= 96);
       lastY = y;
     },
     { passive: true }
