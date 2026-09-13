@@ -67,7 +67,11 @@ body {
   color: var(--text);
   line-height: 1.4;
   height: 100vh;
-  height: 100dvh; /* bounded so the matrix scrolls inside .grid-wrap, not the window */
+  height: 100svh;
+  /* --app-h is set from JS (visualViewport height) because installed Android PWAs
+     report viewport units that include the area behind the system nav bar, which
+     pushes the footer off the bottom edge. The svh value above is the fallback. */
+  height: var(--app-h, 100svh);
   overflow: hidden;
   display: flex;
   flex-direction: column;

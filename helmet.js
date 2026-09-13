@@ -29,11 +29,27 @@ const els = {
 };
 
 /* ---------- Headroom: hide the header/tabs on scroll-down, reveal on scroll-up ---------- */
+// Pin the app to the *visible* viewport height. Installed Android PWAs report
+// 100vh/100svh/100dvh as taller than the usable area (they include the space
+// behind the system navigation bar), which pushes the footer off the bottom.
+// visualViewport.height reflects what's actually on screen, so use that.
+function setAppHeight() {
+  const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  document.documentElement.style.setProperty("--app-h", `${h}px`);
+}
+
 function initHeadroom() {
-  const measure = () =>
+  const measure = () => {
+    setAppHeight();
     document.documentElement.style.setProperty("--chrome-h", `${els.topChrome.offsetHeight}px`);
+  };
   measure();
   window.addEventListener("resize", measure);
+  window.addEventListener("orientationchange", measure);
+  if (window.visualViewport) {
+    window.visualViewport.addEventListener("resize", measure);
+    window.visualViewport.addEventListener("scroll", measure);
+  }
 
   let lastY = 0;
   const THRESHOLD = 6;
