@@ -177,6 +177,7 @@ const state = {
   grid: {},
   weeks: [],
   weekDates: {},
+  apRanks: {}, // ESPN team id -> current AP poll rank (college only)
   currentWeek: null,
   built: false,
   leagueKey: initialSelection().leagueKey,
@@ -405,6 +406,7 @@ function render() {
     const row = state.grid[team.id] || {};
     const isFav = team.id === state.favoriteId;
     const record = teamRecord(row);
+    const apRank = state.apRanks[team.id];
     const cells = state.weeks
       .map(
         (wk) =>
@@ -416,15 +418,18 @@ function render() {
         <th class="team-cell" style="--team-color:#${team.color}" scope="row">
           <div class="team-inner">
             <div class="team-id">
-              <button class="fav-btn ${isFav ? "on" : ""}" type="button"
-                      data-fav-id="${team.id}" aria-pressed="${isFav}"
-                      title="${isFav ? "Unfavorite " + esc(team.name) : "Favorite " + esc(team.name) + " (pins to top)"}">
-                ${isFav ? "★" : "☆"}
-              </button>
+              ${apRank ? `<span class="t-rank">#${apRank}</span>` : ""}
               <img src="${logoUrl(team, dark)}" alt=""
                    onerror="this.onerror=null;this.src='${logoUrl(team, !dark)}';" />
               <span class="t-abbr">${esc(team.abbr)}</span>
-              ${record ? `<span class="t-record">${record}</span>` : ""}
+              <div class="t-foot">
+                <button class="fav-btn ${isFav ? "on" : ""}" type="button"
+                        data-fav-id="${team.id}" aria-pressed="${isFav}"
+                        title="${isFav ? "Unfavorite " + esc(team.name) : "Favorite " + esc(team.name) + " (pins to top)"}">
+                  ${isFav ? "★" : "☆"}
+                </button>
+                ${record ? `<span class="t-record">${record}</span>` : ""}
+              </div>
             </div>
           </div>
         </th>
@@ -445,6 +450,7 @@ function setStatus(msg, isError) {
 async function load() {
   const conf = currentConf();
   state.built = false;
+  state.apRanks = {}; // clear stale ranks (team ids overlap across leagues)
   els.grid.innerHTML = "";
   setStatus(`Loading the full ${conf.label} schedule…`, false);
   els.refresh.disabled = true;
@@ -460,6 +466,16 @@ async function load() {
     fetchJson(wkUrl)
       .then((sb) => {
         state.currentWeek = sb.week && sb.week.number;
+        if (state.built) render();
+      })
+      .catch(() => {});
+
+    // AP Top 25 (college only) — best-effort, non-fatal. Feeds each team's own
+    // rank badge in the team column; NFL resolves to an empty map.
+    fetchApRanks(sport)
+      .then((m) => {
+        if (loadingConf !== state.confKey) return; // stale response after a tab switch
+        state.apRanks = m;
         if (state.built) render();
       })
       .catch(() => {});

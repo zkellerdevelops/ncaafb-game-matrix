@@ -420,15 +420,17 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
 .team-cell, .corner { overflow: hidden; }
 
 .team-inner {
-  display: flex; align-items: center; gap: .5rem;
-  padding: .5rem .6rem;
+  display: flex; justify-content: center; align-items: center;
+  padding: .5rem .4rem;
   border-left: 5px solid var(--team-color, var(--accent));
   overflow: hidden;
 }
 .team-id {
   display: flex; flex-direction: column; align-items: center; gap: 3px;
-  flex: 1; min-width: 0;
+  min-width: 0;
 }
+/* Star + record share one row beneath the abbreviation. */
+.team-id .t-foot { display: flex; align-items: center; gap: .28rem; }
 .team-id img { width: 30px; height: 30px; object-fit: contain; }
 .team-id .t-abbr {
   font-weight: 800; font-size: .68rem; letter-spacing: .01em;
@@ -439,15 +441,25 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
   font-size: .58rem; font-weight: 700; color: var(--text-dim);
   font-variant-numeric: tabular-nums;
 }
+/* Team's own AP Top 25 rank, centered above the logo — same treatment as the
+   opponent-cell rank (.game-cell .rank) for consistency across columns. */
+.team-id .t-rank {
+  font-size: .58rem; 
+  font-weight: 800; 
+  color: #ef4444;
+  padding-bottom: .25rem;
+  line-height: 1; 
+  font-variant-numeric: tabular-nums;
+}
 
-/* Favorite star toggle */
+/* Favorite star toggle, sitting beside the record on the footer row. */
 .fav-btn {
   flex: 0 0 auto;
   border: none;
   background: none;
   cursor: pointer;
-  padding: 2px;
-  font-size: 1rem;
+  padding: 0;
+  font-size: .82rem;
   line-height: 1;
   color: var(--text-dim);
   border-radius: 6px;
@@ -539,7 +551,7 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
   }
   .result-score { font-size: clamp(.5rem, .72vw, .58rem); }
 
-  .fav-btn { font-size: clamp(.85rem, 1.1vw, 1.05rem); }
+  .fav-btn { font-size: clamp(.62rem, .82vw, .74rem); }
 }
 
 .bye {
@@ -568,11 +580,11 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
   .grid-wrap { border-radius: 12px; }
 
   .corner, .team-cell { min-width: 80px; max-width: 80px; }
-  .team-inner { padding: .6rem .3rem; gap: .35rem; }
+  .team-inner { padding: .6rem .3rem; }
   .team-id img { width: 40px; height: 40px; }
   .team-id .t-abbr { font-size: .78rem; }
   .team-id .t-record { font-size: .66rem; }
-  .fav-btn { font-size: 1.2rem; padding: 2px; }
+  .fav-btn { font-size: .86rem; }
 
   .grid thead th { font-size: .82rem; padding: .6rem .4rem; }
   .grid thead th .wk-date { font-size: .7rem; }

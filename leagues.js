@@ -289,6 +289,33 @@ const LEAGUES = {
   },
 };
 
+/* ---------- AP Top 25 poll (shared) ---------- */
+// Fetch the current AP Poll and return a map of ESPN team id -> rank (e.g.
+// { "251": 1 }). Only college football has an AP poll; other leagues (NFL)
+// resolve to an empty map, as does any network/parse failure — callers treat a
+// missing id as "unranked", so a bad fetch simply hides ranks rather than
+// breaking the page.
+async function fetchApRanks(sport) {
+  if (sport !== "college-football") return {};
+  try {
+    const res = await fetch(
+      `https://site.api.espn.com/apis/site/v2/sports/football/${sport}/rankings`,
+      { cache: "no-store" }
+    );
+    if (!res.ok) return {};
+    const data = await res.json();
+    const poll = (data.rankings || []).find((r) => r.type === "ap");
+    const map = {};
+    for (const r of (poll && poll.ranks) || []) {
+      const id = r.team && r.team.id;
+      if (id != null && r.current) map[String(id)] = r.current;
+    }
+    return map;
+  } catch {
+    return {};
+  }
+}
+
 /* ---------- League / conference selection helpers (shared) ---------- */
 const LEAGUE_KEY = "cfb-league"; // which league is active
 const CONF_BY_LEAGUE_KEY = "cfb-conf-by-league"; // last-viewed conference per league

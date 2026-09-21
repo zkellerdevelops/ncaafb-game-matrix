@@ -38,6 +38,7 @@ els.theme.addEventListener("click", () => {
 
 /* ---------- Rendering ---------- */
 const UNRANKED = 99; // ESPN uses 99 for "not in the poll".
+let apRanks = {}; // ESPN team id -> current AP poll rank (college only)
 
 // Is a game currently in progress?
 function isLiveEvent(e) {
@@ -86,7 +87,10 @@ function locationText(competition) {
 
 function teamRow(competitor) {
   const t = competitor.team || {};
-  const rank = competitor.curatedRank ? competitor.curatedRank.current : UNRANKED;
+  // Prefer the live AP poll (college); fall back to ESPN's curated rank, which
+  // is empty for the NFL and can differ from AP late in the college season.
+  const curated = competitor.curatedRank ? competitor.curatedRank.current : UNRANKED;
+  const rank = (t.id != null && apRanks[t.id]) || curated;
   const ranked = rank && rank !== UNRANKED;
   const logo = t.logo || (t.logos && t.logos[0] && t.logos[0].href) || "";
   const winner = competitor.winner === true;
@@ -163,10 +167,16 @@ async function load() {
     // game, so we filter it down to the selected division's teams client-side.
     const base = `https://site.api.espn.com/apis/site/v2/sports/football/${league.sport}/scoreboard`;
     const url = conf.group != null ? `${base}?groups=${conf.group}&limit=100` : `${base}?limit=100`;
-    const res = await fetch(url, { cache: "no-store" });
+    // Fetch the scoreboard and the AP poll (college only) together so rank
+    // badges are ready on first paint.
+    const [res, ap] = await Promise.all([
+      fetch(url, { cache: "no-store" }),
+      fetchApRanks(league.sport),
+    ]);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     if (loadingConf !== confKey) return; // a newer tab was selected mid-flight
+    apRanks = ap;
 
     const season = data.season && data.season.year;
     const week = data.week && data.week.number;
