@@ -23,6 +23,7 @@
   --surface-2: #1c232d;
   --border: #2a323d;
   --fab-border: #535e6d; /* lighter border so the floating group stands off the dark page */
+  --rank-color: #fff; /* AP rank badges: white on dark, black on light */
   --text: #e6edf3;
   --text-dim: #8b98a9;
   --accent: #60a5fa;
@@ -43,6 +44,7 @@
     --surface-2: #1c232d;
     --border: #2a323d;
     --fab-border: #535e6d; /* lighter border so the floating group stands off the dark page */
+    --rank-color: #fff; /* AP rank badges: white on dark, black on light */
     --text: #e6edf3;
     --text-dim: #8b98a9;
     --accent: #60a5fa;
@@ -444,11 +446,11 @@ body.chrome-hidden .top-chrome { margin-top: calc(-1 * var(--chrome-h, 110px)); 
 /* Team's own AP Top 25 rank, centered above the logo — same treatment as the
    opponent-cell rank (.game-cell .rank) for consistency across columns. */
 .team-id .t-rank {
-  font-size: .58rem; 
-  font-weight: 800; 
-  color: #ef4444;
+  font-size: .75rem;
+  font-weight: 800;
+  color: var(--rank-color, #000);
   padding-bottom: .25rem;
-  line-height: 1; 
+  line-height: 1;
   font-variant-numeric: tabular-nums;
 }
 
@@ -494,7 +496,7 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
 }
 .game-cell .ind.at { color: var(--accent); }
 .game-cell .ind.nt { color: #a855f7; }
-.game-cell .rank { font-size: .58rem; font-weight: 800; color: #ef4444; }
+.game-cell .rank { font-size: .75rem; font-weight: 800; color: var(--rank-color, #000); }
 .game-cell .kick { font-size: .56rem; font-weight: 600; color: var(--text-dim); opacity: .85; }
 
 /* Win / loss / tie result badge, sitting above the helmet (in normal flow). */
@@ -538,7 +540,7 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
 
   .game-cell img { width: clamp(26px, 3.4vw, 44px); height: auto; }
   .game-cell .ind { font-size: clamp(.56rem, .92vw, .72rem); }
-  .game-cell .rank { font-size: clamp(.52rem, .78vw, .6rem); }
+  .game-cell .rank { font-size: .75rem; }
   .game-cell .kick { font-size: clamp(.5rem, .74vw, .6rem); }
 
   .grid thead th { font-size: clamp(.62rem, .9vw, .78rem); }
@@ -593,7 +595,7 @@ thead th.current-col { background: var(--highlight); color: var(--text); box-sha
   .game-cell { gap: 4px; }
   .game-cell img { width: 56px; height: 56px; }
   .game-cell .ind { font-size: .8rem; }
-  .game-cell .rank { font-size: .72rem; }
+  .game-cell .rank { font-size: .75rem; }
   .game-cell .kick { font-size: .7rem; }
   .bye { font-size: .72rem; }
 }
